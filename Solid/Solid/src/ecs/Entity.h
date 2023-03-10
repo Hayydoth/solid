@@ -5,51 +5,54 @@
 
 #include "Component.h"
 
-class Entity
-{
-private:
-	Entity(Entity&&) = delete;
-	Entity(Entity const&) = delete;
-	Entity& operator=(Entity) = delete;
-
+class EntityState {
+public:
 	std::map<std::string, Component*> componentMap;
-	void Start() {
-		for (auto pair : componentMap) {
+
+	EntityState(EntityState&&) = delete;
+	EntityState(EntityState const&) = delete;
+	EntityState& operator=(EntityState) = delete;
+
+	EntityState() {}
+
+};
+class EntityLogic {
+public:
+
+	static void Start(EntityState* e) {
+		for (auto pair : e->componentMap) {
 			pair.second->Start();
 		}
 	}
-	void Update() {
-		for (auto pair : componentMap) {
+	static void Update(EntityState* e) {
+		for (auto pair : e->componentMap) {
 			pair.second->Update();
 		}
 	}
-	Entity() {}
-	friend class Scene;
-public:
+
 	template<typename T>
-	void AddComponent() {
+	static void AddComponent(EntityState* e) {
 		static_assert(std::is_base_of<Component, T>::value);
-		if (!componentMap.count(typeid(T).name())) {
-			componentMap[typeid(T).name()] = new T();
+		if (!e->componentMap.count(typeid(T).name())) {
+			e->componentMap[typeid(T).name()] = new T();
 		}
 	}
 
 	template<typename T>
-	void RemoveComponent() {
+	static void RemoveComponent(EntityState* e) {
 		static_assert(std::is_base_of<Component, T>::value);
-		if (componentMap.count(typeid(T).name())) {
-			delete componentMap[typeid(T).name()];
-			componentMap.erase(typeid(T).name());
+		if (e->componentMap.count(typeid(T).name())) {
+			delete e->componentMap[typeid(T).name()];
+			e->componentMap.erase(typeid(T).name());
 		}
 	}
 
 	template<typename T>
-	T* GetComponent() {
+	static T* GetComponent(EntityState* e) {
 		static_assert(std::is_base_of<Component, T>::value);
-		if (componentMap.count(typeid(T).name())) {
-			return dynamic_cast<T*>(componentMap[typeid(T).name()]);
+		if (e->componentMap.count(typeid(T).name())) {
+			return dynamic_cast<T*>(e->componentMap[typeid(T).name()]);
 		}
 		return nullptr;
 	}
 };
-

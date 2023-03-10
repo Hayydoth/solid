@@ -11,10 +11,10 @@ bool Application::Start()
 	shouldClose = false;
 
 	auto initFunc = []() {
-		Scene scene = Scene();
-		scene.AddEntity("test");
-		scene.GetEntity("test")->AddComponent<CMaterial>();
-		std::cout << scene.GetEntity("test")->GetComponent<CMaterial>()->cumstring << "\n";
+		SceneState scene = SceneState();
+		SceneLogic::AddEntity(&scene, "test");
+		EntityLogic::AddComponent<CMaterial>(SceneLogic::GetEntity(&scene, "test"));
+		std::cout << EntityLogic::GetComponent<CMaterial>(SceneLogic::GetEntity(&scene, "test"))->cumstring << "\n";
 	};
 
 	Window::InitData wid;

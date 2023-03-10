@@ -2,37 +2,40 @@
 
 #include "Entity.h"
 
-class Scene
-{
+class SceneState {
 public:
-	std::map<std::string, Entity*> entities;
-	void Start() {
-		for (auto pair : entities) {
-			pair.second->Start();
+	std::map<std::string, EntityState*> entities;
+};
+
+class SceneLogic {
+public:
+	static void Start(SceneState* scene) {
+		for (auto pair : scene->entities) {
+			EntityLogic::Start(pair.second);
 		}
 	}
-	void Update() {
-		for (auto pair : entities) {
-			pair.second->Update();
+	static void Update(SceneState* scene) {
+		for (auto pair : scene->entities) {
+			EntityLogic::Update(pair.second);
 		}
 	}
 
-	void AddEntity(std::string name) {
-		if (!entities.count(name)) {
-			entities[name] = new Entity();
+	static void AddEntity(SceneState* scene, std::string name) {
+		if (!scene->entities.count(name)) {
+			scene->entities[name] = new EntityState();
 		}
 	}
 
-	void RemoveEntity(std::string name) {
-		if (entities.count(name)) {
-			delete entities[name];
-			entities.erase(name);
+	static void RemoveEntity(SceneState* scene, std::string name) {
+		if (scene->entities.count(name)) {
+			delete scene->entities[name];
+			scene->entities.erase(name);
 		}
 	}
 
-	Entity* GetEntity(std::string name) {
-		if (entities.count(name)) {
-			return entities[name];
+	static EntityState* GetEntity(SceneState* scene, std::string name) {
+		if (scene->entities.count(name)) {
+			return scene->entities[name];
 		}
 		return nullptr;
 	}
