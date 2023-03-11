@@ -11,18 +11,25 @@ bool Application::Start()
 {
 	shouldClose = false;
 
-	auto initFunc = []() {
-		SceneState scene = SceneState();
+	auto initFunc = [&]() {
 		SceneLogic::AddEntity(&scene, "test");
 		EntityLogic::AddComponent<CMaterial>(SceneLogic::GetEntity(&scene, "test"));
 		std::cout << EntityLogic::GetComponent<CMaterial>(SceneLogic::GetEntity(&scene, "test"))->cumstring << "\n";
+	
+		SceneLogic::Start(&scene);
+	};
+
+	auto updateFunc = [&]() {
+		SceneLogic::Update(&scene);
 	};
 
 	Window::InitData wid;
 	wid.initCallback = initFunc;
+	wid.updateCallback = updateFunc;
 	wid.size[0] = 1280; wid.size[1] = 720;
 	wid.title = "solid";
-	return Window::Init(wid);
+	Window::Instance().SetInitData(wid);
+	return Window::Instance().Init();
 }
 
 void Application::Loop()
@@ -31,7 +38,7 @@ void Application::Loop()
 	{
 		OPTICK_FRAME("MainThread");
 
-		Window::Update();
+		Window::Instance().Update();
 	}
-	Window::Destroy();
+	Window::Instance().Destroy();
 }

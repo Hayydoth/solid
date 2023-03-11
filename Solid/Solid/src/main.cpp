@@ -2,8 +2,8 @@
 
 int main()
 {
-    if (Application::Start()) {
-        Application::Loop();
+    if (Application::Instance().Start()) {
+        Application::Instance().Loop();
     }
     
     return 0;

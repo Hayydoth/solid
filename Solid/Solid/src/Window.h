@@ -10,20 +10,38 @@ class Application;
 
 class Window
 {
-private:
-	static inline GLFWwindow* handle;
 public:
 	struct InitData {
 		int size[2];
 		std::string title;
 		std::function<void()> initCallback;
+		std::function<void()> updateCallback;
 	};
+private:
+	GLFWwindow* handle;
+	InitData data;
 
-	static GLFWwindow* GetHandle() {
+	Window() = default;
+
+	Window(Window&&) = delete;
+	Window(const Window&) = delete;
+	Window& operator= (Window) = delete;
+public:
+
+	static Window& Instance() {
+		static Window instance;
+		return instance;
+	}
+
+	GLFWwindow* GetHandle() {
 		return handle;
 	}
 
-	static bool Init(InitData data);
-	static void Update();
-	static void Destroy();
+	void SetInitData(InitData wid) {
+		data = wid;
+	}
+
+	bool Init();
+	void Update();
+	void Destroy();
 };

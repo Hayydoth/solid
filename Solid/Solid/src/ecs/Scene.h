@@ -5,6 +5,10 @@
 class SceneState {
 public:
 	std::map<std::string, EntityState*> entities;
+
+	SceneState() {
+		entities = std::map<std::string, EntityState*>();
+	}
 };
 
 class SceneLogic {

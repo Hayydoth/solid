@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-bool Window::Init(InitData data)
+bool Window::Init()
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -30,7 +30,9 @@ bool Window::Init(InitData data)
     }
 
     glClearColor(.15f, .15f, .15f, 1.0f);
+    
     data.initCallback();
+
     std::cout << "Started successfully.\n";
     return true;
 }
@@ -39,9 +41,11 @@ void Window::Update()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    data.updateCallback();
+
     glfwSwapBuffers(handle);
     glfwPollEvents();
-    if (glfwWindowShouldClose(handle)) { Application::shouldClose = true; }
+    if (glfwWindowShouldClose(handle)) { Application::Instance().shouldClose = true; }
 }
 
 void Window::Destroy()
