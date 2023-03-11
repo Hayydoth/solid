@@ -2,6 +2,9 @@
 #include "Application.h"
 
 #include <iostream>
+#include "../vendor/imgui/imgui.h"
+#include "../vendor/imgui/imgui_impl_glfw.h"
+#include "../vendor/imgui/imgui_impl_opengl3.h"
 
 bool Window::Init()
 {
@@ -29,6 +32,16 @@ bool Window::Init()
         return false;
     }
 
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGui::StyleColorsDark();
+
+    // setup platform/renderer bindings
+    if (!ImGui_ImplGlfw_InitForOpenGL(handle, true)) { return false; }
+    if (!ImGui_ImplOpenGL3_Init("#version 330")) { return false; }
+
     glClearColor(.15f, .15f, .15f, 1.0f);
     
     data.initCallback();
@@ -42,6 +55,16 @@ void Window::Update()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     data.updateCallback();
+
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    ImGui::Begin("cummers");
+    ImGui::End();
+    
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     glfwSwapBuffers(handle);
     glfwPollEvents();

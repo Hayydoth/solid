@@ -1,4 +1,7 @@
 # solid
 game engine
 
-stay away from weird objects with complicated ownership relations
+# todo
+* add basic rendering capabilities
+* run tests
+* write a wrapper for imgui

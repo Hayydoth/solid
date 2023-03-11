@@ -7,14 +7,20 @@
 #include <optick/optick.h>
 #include <iostream>
 
+template<typename T>
+const auto eac = EntityLogic::AddComponent<T>;
+
+template<typename T>
+const auto egc = EntityLogic::GetComponent<T>;
+
 bool Application::Start()
 {
 	shouldClose = false;
 
 	auto initFunc = [&]() {
 		SceneLogic::AddEntity(&scene, "test");
-		EntityLogic::AddComponent<CMaterial>(SceneLogic::GetEntity(&scene, "test"));
-		std::cout << EntityLogic::GetComponent<CMaterial>(SceneLogic::GetEntity(&scene, "test"))->cumstring << "\n";
+		eac<CMaterial>(SceneLogic::GetEntity(&scene, "test"));
+		std::cout << egc<CMaterial>(SceneLogic::GetEntity(&scene, "test"))->cumstring << "\n";
 	
 		SceneLogic::Start(&scene);
 	};
