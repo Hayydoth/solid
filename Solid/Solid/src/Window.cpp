@@ -37,14 +37,11 @@ bool Window::Init(InitData data)
 
 void Window::Update()
 {
-    while (!Application::shouldClose)
-    {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glfwSwapBuffers(handle);
-        glfwPollEvents();
-        if (glfwWindowShouldClose(handle)) { Application::shouldClose = true; }
-    }
+    glfwSwapBuffers(handle);
+    glfwPollEvents();
+    if (glfwWindowShouldClose(handle)) { Application::shouldClose = true; }
 }
 
 void Window::Destroy()

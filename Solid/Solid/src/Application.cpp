@@ -4,6 +4,7 @@
 #include "ecs/Scene.h"
 #include "ecs/components/CMaterial.h"
 
+#include <optick/optick.h>
 #include <iostream>
 
 bool Application::Start()
@@ -26,6 +27,11 @@ bool Application::Start()
 
 void Application::Loop()
 {
-	Window::Update();
+	while (!Application::shouldClose)
+	{
+		OPTICK_FRAME("MainThread");
+
+		Window::Update();
+	}
 	Window::Destroy();
 }
